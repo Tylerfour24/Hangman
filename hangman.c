@@ -1,23 +1,77 @@
 #include <stdio.h>
+#include <string.h>
+
+void setup(int index, char *answer, char *display);
 
 int main(void)
 {
-	char array[8];
-	int i;
+	char answer[8];
+	char display[8];
+	char checker[8];
+	char guess[2]; //space for one character, the newline, and the null byte
+	int index;
+	int wrongcount;
+	int compare;
 
-	array[0] = 'H';
-	array[1] = 'a';
-	array[2] = 'n';
-	array[3] = 'g';
-	array[4] = 'm';
-	array[5] = 'a';
-	array[6] = 'n';
+	answer[0] = 'h';
+	answer[1] = 'a';
+	answer[2] = 'n';
+	answer[3] = 'g';
+	answer[4] = 'm';
+	answer[5] = 'a';
+	answer[6] = 'n';
 
-	for(i = 0; i < 7; i++) {
-		printf("%c", array[i]);
+	for(index = 0; index < 7; index++) {
+		display[index] = '_';
+	}
+
+	setup(index, answer, display);
+
+	wrongcount = 0;
+	while( (wrongcount != 6) && (answer != display) ) {
+
+		printf("Enter a letter: ");
+		fgets(guess, sizeof(guess)+1, stdin);
+		strncpy(checker, display, sizeof(display)+1); //this is supposed to create a copy of the empty display
+		//checker[index] = display[index];
+		for(index = 0; index < 7; index++) {
+
+			if(answer[index] == guess[0]) {
+				display[index] = guess[0]; //alter display if the guessed letter is present
+			}
+		}
+
+		compare = strcmp(display, checker);
+
+		if(compare == 0) { //if display was not updated (if guess was wrong)
+			wrongcount += 1;
+		}
+
+		else {
+			; //Do nothing
+		}
+
+		printf("%d\n", wrongcount);
+
+		for(index = 0; index < 7; index++) {
+			printf("%c", display[index]);
+		}
+		printf("\n");
+	}
+	return 0;
+}
+
+void setup(int index, char *answer, char *display) {
+
+	for(index = 0; index < 7; index++) {
+		printf("%c", answer[index]);
 	}
 
 	printf("\n");
 
-	return 0;
+	for(index = 0; index < 7; index++) {
+		printf("%c", display[index]);
+	}
+
+	printf("\n");
 }
