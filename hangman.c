@@ -12,6 +12,7 @@ int main(void)
 	int index;
 	int wrongcount;
 	int compare;
+	int correct;
 
 	answer[0] = 'h';
 	answer[1] = 'a';
@@ -28,7 +29,8 @@ int main(void)
 	setup(index, answer, display);
 
 	wrongcount = 0;
-	while( (wrongcount != 6) && (answer != display) ) {
+	correct = strcmp(display, answer);
+	while( (wrongcount != 6) && (correct != 0) ) {
 
 		printf("Enter a letter: ");
 		fgets(guess, sizeof(guess)+1, stdin);
@@ -40,7 +42,8 @@ int main(void)
 				display[index] = guess[0]; //alter display if the guessed letter is present
 			}
 		}
-
+		
+		correct = strcmp(display, answer);
 		compare = strcmp(display, checker);
 
 		if(compare == 0) { //if display was not updated (if guess was wrong)
