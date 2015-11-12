@@ -4,7 +4,7 @@
 void setup(int index, char *answer, char *display);
 void result(int correct, int wrongcount);
 
-int main(void)
+int main(void) //(int argc, char *argv[])
 {
 	char answer[8];
 	char display[8];
@@ -23,6 +23,15 @@ int main(void)
 	answer[5] = 'a';
 	answer[6] = 'n';
 
+/*picking random line from file of unknown length
+row 1 - 100%
+row 2 - 50%
+row 3 - 33%
+
+0 <= x <= 1
+
+x < 1/n; x
+*/
 	for(index = 0; index < 7; index++) {
 		display[index] = '_';
 	}
@@ -56,11 +65,12 @@ int main(void)
 		}
 
 		result(correct, wrongcount);
+		printf("\n");
 
 		for(index = 0; index < 7; index++) {
 			printf("%c", display[index]);
 		}
-		printf("\n");
+		printf("\n\n");
 	}
 	return 0;
 }
@@ -82,11 +92,31 @@ void setup(int index, char *answer, char *display) {
 
 void result(int correct, int wrongcount) {
 	if(correct == 0) {
-		printf("\n\nYOU WIN!\n\n");
-		printf("   ___\n  |   |\n      |\n      |      O\n      |     /|\\ \n  ____|____ / \\ \n"); //Prints winning screen
+		printf("\n\nYOU WIN!!\n\n");
+		printf("   ___\n  |   |\n      |\n      |     \\O/\n      |      |   \n  ____|____ / \\ \n"); //Prints winning screen
+		switch(wrongcount) {
+			case(0) :
+				printf("You missed no guesses!");
+				break;
+			case(1) :
+				printf("You missed one guess!");
+				break;
+			case(2) :
+				printf("You missed two guesses!");
+				break;
+			case(3) :
+				printf("You missed three guesses!");
+				break;
+			case(4) :
+				printf("You missed four guesses!");
+				break;
+			case(5) :
+				printf("You missed five guesses!");
+				break;
+		}
 	}
 	else {
-		switch(wrongcount){ //Prints necessary screen based on number of guesses remaining.
+		switch(wrongcount) { //Prints necessary screen based on number of guesses remaining.
 			case(0) :
 				printf("   ___\n  |   |\n      |\n      |\n      |\n  ____|____\n");
 				break;
@@ -94,21 +124,23 @@ void result(int correct, int wrongcount) {
 				printf("   ___\n  |   |\n  O   |\n      |\n      |\n  ____|____\n");
 				break;
 			case(2) :
-				printf("   ___\n  |   |\n \\O   |\n      |\n      |\n  ____|____\n");
+				printf("   ___\n  |   |\n  O   |\n  |   |\n      |\n  ____|____\n");
 				break;
 			case(3) :
-				printf("   ___\n  |   |\n \\O/  |\n      |\n      |\n  ____|____\n");
+				printf("   ___\n  |   |\n  O   |\n /|   |\n      |\n  ____|____\n");
 				break;
 			case(4) :
-				printf("   ___\n  |   |\n \\O/  |\n  |   |\n      |\n  ____|____\n");
+				printf("   ___\n  |   |\n  O   |\n /|\\  |\n      |\n  ____|____\n");
 				break;
 			case(5) :
-				printf("   ___\n  |   |\n \\O/  |\n  |   |\n /    |\n  ____|____\n");
+				printf("   ___\n  |   |\n  O   |\n /|\\  |\n /    |\n  ____|____\n");
 				break;
 			case(6) :
 				printf("\n\nYOU LOSE!\n\n");
-				printf("   ___\n  |   |\n \\O/  |\n  |   |\n / \\  |\n  ____|____\n");
+				printf("   ___\n  |   |\n  O   |\n /|\\  |\n / \\  |\n  ____|____\n");
 				break;
 		}
 	}
 }
+
+/*Should the making of the history file be included in the makefile? That would make sense.*/
