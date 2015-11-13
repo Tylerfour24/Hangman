@@ -7,7 +7,7 @@ void setup(int index, char *answer, char *display);
 void result(int correct, int wrongcount);
 void statistics(int correct, int wrongcount);
 
-int main(void) //(int argc, char *argv[]) once this is ready to accept command line input, if ever
+int main(int argc, char *argv[]) //(int argc, char *argv[]) once this is ready to accept command line input, if ever
 {
 	srand(time(NULL));
 	char answer[35]={'\0'};
@@ -24,9 +24,13 @@ int main(void) //(int argc, char *argv[]) once this is ready to accept command l
 	//int *losses
 	//wins = 0;
 	//losses = 0;
-	
-	printf("%s\n", getenv("HOME")); //(debugging?) statement to show that i'm getting an environment variable
-	combine = strncat(getenv("HOME"), "/.words", 35);
+
+	if(argc != 2) {
+		combine = strncat(getenv("HOME"), "/.words", 35);
+	}
+	else {
+		combine = strncat(getenv("HOME"), argv[1], 35);
+	}
 	FILE *userfile = fopen(combine, "r");
 	if(userfile == NULL) {
 		printf("File missing, exiting program.\n");
@@ -37,21 +41,21 @@ int main(void) //(int argc, char *argv[]) once this is ready to accept command l
 		coin = rand(); //generate random number
 		coin %= 2; //that is equal to (0?), 1, or (2?)
 		if(coin == 1) { //if random number generated is 1
-			fgets(answer, 35, userfile); //read in next line
+			fgets(answer, 35, userfile); //read next line into answer
 			break;
 		}
 		else {
-		; //do nothing
+			; //do nothing
 		}
 	}
 
-	answer[0] = 's'; //Still need to grab a word from a file (and make a history file)
+	/*answer[0] = 's'; //Still need to grab a word from a file (and make a history file)
 	answer[1] = 'c';
 	answer[2] = 'h';
 	answer[3] = 'i';
 	answer[4] = 's';
 	answer[5] = 'm';
-	answer[6] = 's';
+	answer[6] = 's';*/
 
 	for(index = 0; index < 35; index++) {
 		if(answer[index] == '\0') {
@@ -72,10 +76,14 @@ int main(void) //(int argc, char *argv[]) once this is ready to accept command l
 		fgets(guess, sizeof(guess)+1, stdin);
 		strncpy(checker, display, sizeof(display)+1);
 
-		for(index = 0; index < 7; index++) {
-
-			if(answer[index] == guess[0]) {
-				display[index] = guess[0];
+		for(index = 0; index < 35; index++) {
+			if(answer[index] == '\0') {
+				break;
+			}
+			else {
+				if(answer[index] == guess[0]) {
+					display[index] = guess[0];
+				}
 			}
 		}
 		
@@ -94,35 +102,42 @@ int main(void) //(int argc, char *argv[]) once this is ready to accept command l
 
 		printf("\n");
 
-		for(index = 0; index < 7; index++) {
-			printf("%c", display[index]);
+		for(index = 0; index < 35; index++) {
+			if(answer[index] == '\0') {
+				break;
+			}
+			else {
+				printf("%c", display[index]);
+			}
 		}
 		printf("\n\n");
 	}
 
 	if(correct != 0) {
 		printf("Correct answer: ");
-		for(index = 0; index < 7; index++) {
-			printf("%c", answer[index]);
+		for(index = 0; index < 35; index++) {
+			if(answer[index] == '\0') {
+				break;
+			}
+			else {
+				printf("%c", answer[index]);
+			}
 		}
 		printf("\n\n");
 	}
-
 	return 0;
 }
 
 void setup(int index, char *answer, char *display) { //Starts the game
 
-	for(index = 0; index < 7; index++) { //Remove this before submitting program
-		printf("%c", answer[index]);
+	for(index = 0; index < 35; index++) {
+		if(answer[index] == '\0') {
+			break;
+		}
+		else {
+			printf("%c", display[index]);
+		}
 	}
-
-	printf("\n");
-
-	for(index = 0; index < 7; index++) {
-		printf("%c", display[index]);
-	}
-
 	printf("\n\n");
 }
 
