@@ -25,8 +25,6 @@ int main(int argc, char *argv[])
 	int linecount = 0;
 	int wordchoice = 0;
 
-	//statistics();
-
 	if(argc != 2) {
 		combine = strncat(getenv("HOME"), "/.words", 35);
 	}
@@ -41,7 +39,7 @@ int main(int argc, char *argv[])
 	}
 
 	 
-	while(fgets(pseudoanswer, 35, userfile) != NULL) { //read next line into answer
+	while(fgets(pseudoanswer, 35, userfile) != NULL) { 
 		linecount++;
 	}
 	fseek(userfile, 0, SEEK_SET);
@@ -49,7 +47,7 @@ int main(int argc, char *argv[])
 	while(fgets(pseudoanswer, 35, userfile) != NULL) {
 		wordchoice++;
 		if (wordchoice == die) {
-			strncpy(answer, pseudoanswer, 35);
+			strncpy(answer, pseudoanswer, 35); //chooses line from file
 		}
 	}
 
@@ -123,7 +121,7 @@ int main(int argc, char *argv[])
 		}
 		printf("\n\n");
 	}
-	statistics();
+	//statistics(); This is my call to my attempted history function
 	return 0;
 }
 
@@ -194,22 +192,25 @@ void result(int correct, int wrongcount) { //Handles guess and win/loss images
 	}
 }
 
-void statistics() {//int correct, int wrongcount, int wins, int losses, char fuse, int index
+/*void statistics() {//this was my attempted function to record history into a file
 
 	int index = 0;
 	int scores[5] = {'\0'};
-	char fuse[100] = {'\0'};
+	char fuse[100] = {0};
 	double average = 0.0;
 
-	FILE *histfile; 
+	FILE *histfile;
 
 	strncpy(fuse, getenv("HOME"), 100);
 	strncat(fuse, "/.hangman", 100);
 
 	histfile = fopen(fuse, "r");
 	if (histfile == NULL) {
-		fclose(histfile);
-		histfile = fopen(fuse, "w");
+		histfile = fopen(fuse, "w+");
+		if (histfile == NULL) {
+			printf("Sorry, we're done here.\n");
+			exit(0);
+		}
 		fprintf(histfile, "1000");
 	}
 	while((scores[index] = fgetc(histfile)) != EOF) {
@@ -231,23 +232,5 @@ void statistics() {//int correct, int wrongcount, int wins, int losses, char fus
 		printf("%d Win/%d Losses, Average Score: %.1f", scores[1], scores[2], average);
 	}
 	fclose(histfile);
+*/
 
-	/*printf("Game: %d\n", scores[0]);
-	printf("Wins: %d\n", scores[1]);
-	printf("Losses: %d\n", scores[2]);
-	printf("Average: %d\n", scores[3]);*/
-}
-
-
-
-
-/*void statistics() {
-	if(correct == 0) {
-		wins++;
-		printf("%d\n", wins);
-	}
-	else if (wrongcount == 6) {
-		losses++;
-		printf("%d\n", losses);
-	}
-}*/
