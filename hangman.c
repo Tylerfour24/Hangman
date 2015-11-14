@@ -5,11 +5,12 @@
 
 void setup(int index, char *answer, char *display);
 void result(int correct, int wrongcount);
-void statistics(int correct, int wrongcount, int wins, int losses);
+void statistics(void);
 
-int main(int argc, char *argv[]) //(int argc, char *argv[]) once this is ready to accept command line input, if ever
+int main(int argc, char *argv[])
 {
 	srand(time(NULL));
+
 	char answer[35]={'\0'};
 	char pseudoanswer[35]={'\0'};
 	char display[35]={'\0'};
@@ -20,10 +21,11 @@ int main(int argc, char *argv[]) //(int argc, char *argv[]) once this is ready t
 	int compare;
 	int correct;
 	char *combine;
-	//char *fuse;
 	int die;
 	int linecount = 0;
 	int wordchoice = 0;
+
+	//statistics();
 
 	if(argc != 2) {
 		combine = strncat(getenv("HOME"), "/.words", 35);
@@ -34,6 +36,7 @@ int main(int argc, char *argv[]) //(int argc, char *argv[]) once this is ready t
 	FILE *userfile = fopen(combine, "r");
 	if(userfile == NULL) {
 		printf("File missing, exiting program.\n");
+		fclose(userfile);
 		exit(0);
 	}
 
@@ -49,9 +52,6 @@ int main(int argc, char *argv[]) //(int argc, char *argv[]) once this is ready t
 			strncpy(answer, pseudoanswer, 35);
 		}
 	}
-
-
-	
 
 	for(index = 0; index < 35; index++) {
 		if(answer[index] == '\n') {
@@ -78,10 +78,8 @@ int main(int argc, char *argv[]) //(int argc, char *argv[]) once this is ready t
 				answer[index] = '\0';
 				break;
 			}
-			else {
-				if(answer[index] == guess[0]) {
-					display[index] = guess[0];
-				}
+			else if (answer[index] == guess[0]) {
+				display[index] = guess[0];
 			}
 		}
 		
@@ -125,25 +123,7 @@ int main(int argc, char *argv[]) //(int argc, char *argv[]) once this is ready t
 		}
 		printf("\n\n");
 	}
-
-
-
-
-
-	/*fuse = strncat(getenv("HOME"), "/.gamestats", 35);
-
-	
-
-void statistics(int correct, int wrongcount, int wins, int losses, char fuse) {
-
-	FILE *histfile = fopen(fuse, "w+");
-	int wins;
-	int losses;
-	int average;
-
-*/
-
-
+	statistics();
 	return 0;
 }
 
@@ -214,6 +194,53 @@ void result(int correct, int wrongcount) { //Handles guess and win/loss images
 	}
 }
 
+void statistics() {//int correct, int wrongcount, int wins, int losses, char fuse, int index
+
+	int index = 0;
+	int scores[5] = {'\0'};
+	char fuse[100] = {'\0'};
+	double average = 0.0;
+
+	FILE *histfile; 
+
+	strncpy(fuse, getenv("HOME"), 100);
+	strncat(fuse, "/.hangman", 100);
+
+	histfile = fopen(fuse, "r");
+	if (histfile == NULL) {
+		fclose(histfile);
+		histfile = fopen(fuse, "w");
+		fprintf(histfile, "1000");
+	}
+	while((scores[index] = fgetc(histfile)) != EOF) {
+		scores[index] -='0';
+		index++;
+	}
+
+	average = scores[3] * 1.0;
+
+	if(scores[0] == -1)  {
+		scores[0] = 1;
+	}
+
+	printf("Game %d. ", scores[0]);
+	if(scores[1] > 1) {
+		printf("%d Wins/%d Losses, Average Score: %.1f", scores[1], scores[2], average);
+	}
+	else{
+		printf("%d Win/%d Losses, Average Score: %.1f", scores[1], scores[2], average);
+	}
+	fclose(histfile);
+
+	/*printf("Game: %d\n", scores[0]);
+	printf("Wins: %d\n", scores[1]);
+	printf("Losses: %d\n", scores[2]);
+	printf("Average: %d\n", scores[3]);*/
+}
+
+
+
+
 /*void statistics() {
 	if(correct == 0) {
 		wins++;
@@ -224,4 +251,3 @@ void result(int correct, int wrongcount) { //Handles guess and win/loss images
 		printf("%d\n", losses);
 	}
 }*/
-
