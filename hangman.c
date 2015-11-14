@@ -5,12 +5,13 @@
 
 void setup(int index, char *answer, char *display);
 void result(int correct, int wrongcount);
-void statistics(int correct, int wrongcount);
+void statistics(int correct, int wrongcount, int wins, int losses);
 
 int main(int argc, char *argv[]) //(int argc, char *argv[]) once this is ready to accept command line input, if ever
 {
 	srand(time(NULL));
 	char answer[35]={'\0'};
+	char pseudoanswer[35]={'\0'};
 	char display[35]={'\0'};
 	char checker[35]={'\0'};
 	char guess[2];
@@ -19,11 +20,10 @@ int main(int argc, char *argv[]) //(int argc, char *argv[]) once this is ready t
 	int compare;
 	int correct;
 	char *combine;
-	int coin;
-	//int *wins
-	//int *losses
-	//wins = 0;
-	//losses = 0;
+	//char *fuse;
+	int die;
+	int linecount = 0;
+	int wordchoice = 0;
 
 	if(argc != 2) {
 		combine = strncat(getenv("HOME"), "/.words", 35);
@@ -37,28 +37,25 @@ int main(int argc, char *argv[]) //(int argc, char *argv[]) once this is ready t
 		exit(0);
 	}
 
-	while(!EOF){ //if not at end of file
-		coin = rand(); //generate random number
-		coin %= 2; //that is equal to (0?), 1, or (2?)
-		if(coin == 1) { //if random number generated is 1
-			fgets(answer, 35, userfile); //read next line into answer
-			break;
-		}
-		else {
-			; //do nothing
+	 
+	while(fgets(pseudoanswer, 35, userfile) != NULL) { //read next line into answer
+		linecount++;
+	}
+	fseek(userfile, 0, SEEK_SET);
+	die = (rand() % linecount) ;
+	while(fgets(pseudoanswer, 35, userfile) != NULL) {
+		wordchoice++;
+		if (wordchoice == die) {
+			strncpy(answer, pseudoanswer, 35);
 		}
 	}
 
-	/*answer[0] = 's'; //Still need to grab a word from a file (and make a history file)
-	answer[1] = 'c';
-	answer[2] = 'h';
-	answer[3] = 'i';
-	answer[4] = 's';
-	answer[5] = 'm';
-	answer[6] = 's';*/
+
+	
 
 	for(index = 0; index < 35; index++) {
-		if(answer[index] == '\0') {
+		if(answer[index] == '\n') {
+			answer[index] = '\0';
 			break;
 		}
 		else {
@@ -77,7 +74,8 @@ int main(int argc, char *argv[]) //(int argc, char *argv[]) once this is ready t
 		strncpy(checker, display, sizeof(display)+1);
 
 		for(index = 0; index < 35; index++) {
-			if(answer[index] == '\0') {
+			if(answer[index] == '\n') {
+				answer[index] = '\0';
 				break;
 			}
 			else {
@@ -103,7 +101,8 @@ int main(int argc, char *argv[]) //(int argc, char *argv[]) once this is ready t
 		printf("\n");
 
 		for(index = 0; index < 35; index++) {
-			if(answer[index] == '\0') {
+			if(answer[index] == '\n') {
+				answer[index] = '\0';
 				break;
 			}
 			else {
@@ -116,7 +115,8 @@ int main(int argc, char *argv[]) //(int argc, char *argv[]) once this is ready t
 	if(correct != 0) {
 		printf("Correct answer: ");
 		for(index = 0; index < 35; index++) {
-			if(answer[index] == '\0') {
+			if(answer[index] == '\n') {
+				answer[index] = '\0';
 				break;
 			}
 			else {
@@ -125,13 +125,33 @@ int main(int argc, char *argv[]) //(int argc, char *argv[]) once this is ready t
 		}
 		printf("\n\n");
 	}
+
+
+
+
+
+	/*fuse = strncat(getenv("HOME"), "/.gamestats", 35);
+
+	
+
+void statistics(int correct, int wrongcount, int wins, int losses, char fuse) {
+
+	FILE *histfile = fopen(fuse, "w+");
+	int wins;
+	int losses;
+	int average;
+
+*/
+
+
 	return 0;
 }
 
 void setup(int index, char *answer, char *display) { //Starts the game
 
 	for(index = 0; index < 35; index++) {
-		if(answer[index] == '\0') {
+		if(answer[index] == '\n') {
+			answer[index] = '\0';
 			break;
 		}
 		else {
@@ -194,28 +214,14 @@ void result(int correct, int wrongcount) { //Handles guess and win/loss images
 	}
 }
 
-/*void statistics(int correct, int wrongcount, int wins, int losses) {
+/*void statistics() {
 	if(correct == 0) {
-		*wins++;
+		wins++;
+		printf("%d\n", wins);
 	}
 	else if (wrongcount == 6) {
-		*losses++;
+		losses++;
+		printf("%d\n", losses);
 	}
 }*/
 
-	/*if(argc != 2) {
-		FILE *fopen(~/.words, r);
-	}
-	else {
-		FILE *fopen(argv[1], r);
-	}*/
-
-/*picking random line from file of unknown length
-row 1 - 100%
-row 2 - 50%
-row 3 - 33%
-
-0 <= x <= 1
-
-x < 1/n; x
-*/
