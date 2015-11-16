@@ -193,6 +193,7 @@ void result(int correct, int wrongcount) { //Handles guess and win/loss images
 }
 
 /*void statistics() {//this was my attempted function to record history into a file
+This commented code was obtained from Reed Follensbee
 
 	int index = 0;
 	int scores[5] = {'\0'};
